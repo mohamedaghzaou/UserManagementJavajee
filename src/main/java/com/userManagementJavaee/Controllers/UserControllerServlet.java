@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.userManagementJavaee.Dao.UserDao;
 import com.userManagementJavaee.Dao.UserDaoImp;
+import com.userManagementJavaee.beans.User;
 
 /**
  * Servlet implementation class UserControllerServlet
@@ -32,7 +33,10 @@ public class UserControllerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().print(userDao.findById(4));
+		User u = new User("adam", "aghzaou", "tetouan", "", "", "");
+		userDao.save(u);
+		
+		response.getWriter().print(userDao.findAll());
 	}
 
 	/**
