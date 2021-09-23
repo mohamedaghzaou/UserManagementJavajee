@@ -1,6 +1,7 @@
 package com.userManagementJavaee.Dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -49,8 +50,36 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public User findById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultset = null;
+		daoFactory = DaoFactory.getInstance();
+		try {
+			
+			connection =  daoFactory.getConnection();
+			statement = connection.prepareStatement("select * from userInfos where id = ?");
+			statement.setLong(1, id);
+			resultset = statement.executeQuery();
+			
+			while(resultset.next()) {
+				user = new User(resultset.getInt(1),
+						resultset.getString(2),
+						resultset.getString(3),
+						resultset.getString(4),
+						resultset.getString(5),
+						resultset.getString(6),
+						resultset.getString(7));
+				
+			}
+			
+		}catch(Exception e) {
+			
+		}
+		connection = null;
+		statement = null;
+		resultset = null;
+		return user;		
 	}
 
 	@Override

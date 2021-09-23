@@ -68,5 +68,11 @@ public class User {
 		PhoneNumber = phoneNumber;
 		this.sex = sex;
 	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
+				+ ", Email=" + Email + ", PhoneNumber=" + PhoneNumber + ", sex=" + sex + "]";
+	}
+	
 	
 }

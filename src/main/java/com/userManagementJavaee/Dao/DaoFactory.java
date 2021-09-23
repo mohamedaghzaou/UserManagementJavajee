@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.apache.tomcat.dbcp.dbcp2.DriverConnectionFactory;
 
 public class DaoFactory {
 	
@@ -17,18 +16,14 @@ public class DaoFactory {
 		this.username = username;
 		this.password = password;
 	}
-	
-	
 	public static DaoFactory getInstance() {
 		 DaoFactory doa = null;
-		
 		try {
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");			
 		}catch(Exception e) {
 				
 		}
-		
 		doa =new DaoFactory("jdbc:mysql://localhost:3306/userManagement","root", "password");
 		
 		return doa;
