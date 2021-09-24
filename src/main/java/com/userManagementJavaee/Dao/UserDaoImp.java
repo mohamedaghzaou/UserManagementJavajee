@@ -13,19 +13,25 @@ import com.userManagementJavaee.beans.User;
 public class UserDaoImp implements UserDao {
 	
 	private DaoFactory daoFactory= null;
+	
+	public UserDaoImp() {
+		daoFactory = DaoFactory.getInstance();
+	}
+	
 
 	@Override
 	public List<User> findAll() {
 		// TODO Auto-generated method stub
-		List<User> users = new ArrayList<>();
-		Connection connection = null;
-		Statement statement = null;
+		List<User> users = null;
 		ResultSet resultset = null;
-		daoFactory = DaoFactory.getInstance();
-		try {
-			
-			connection =  daoFactory.getConnection();
-			statement = connection.createStatement();
+		
+		try
+		(
+				Connection connection =  daoFactory.getConnection();
+				Statement statement = connection.createStatement();
+		)
+		{
+			users = new ArrayList<>();
 			resultset = statement.executeQuery("select * from userInfos");
 			
 			while(resultset.next()) {
@@ -42,18 +48,10 @@ public class UserDaoImp implements UserDao {
 		}catch(Exception e) {
 		}finally {
 			try {
-				if(!connection.isClosed()) {
-					connection.close();
-				}
-				if(!statement.isClosed()) {
-					statement.close();
-				}
 				if(!resultset.isClosed()) {
 					resultset.close();
 				}
-				daoFactory= null;
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -65,19 +63,19 @@ public class UserDaoImp implements UserDao {
 	@Override
 	public User findById(long id) {
 		User user = null;
-		Connection connection = null;
-		PreparedStatement statement = null;
 		ResultSet resultset = null;
-		daoFactory = DaoFactory.getInstance();
-		try {
+		try(
+				Connection connection =  daoFactory.getConnection();
+				PreparedStatement statement = connection.prepareStatement("select * from userInfos where id = ?");
+				
+			) {
 			
-			connection =  daoFactory.getConnection();
-			statement = connection.prepareStatement("select * from userInfos where id = ?");
 			statement.setLong(1, id);
 			resultset = statement.executeQuery();
 			
 			if(resultset.next()) {
-				user = new User(resultset.getInt(1),
+				user = new User(
+						resultset.getInt(1),
 						resultset.getString(2),
 						resultset.getString(3),
 						resultset.getString(4),
@@ -90,60 +88,72 @@ public class UserDaoImp implements UserDao {
 			
 		}finally {
 			try {
-				if(!connection.isClosed()) {
-					connection.close();
-				}
-				if(!statement.isClosed()) {
-					statement.close();
-				}
-				if(!resultset.isClosed()) {
+				if(resultset!=null) {
 					resultset.close();
 				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				
+			} catch (Exception e2) {
+				// TODO: handle exception
 			}
 		}
-		connection = null;
-		statement = null;
-		resultset = null;
 		return user;		
 	}
 
 	@Override
-	public void deleteById(long id) {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		daoFactory = DaoFactory.getInstance();
-		
-		
-		try {
-			connection =  daoFactory.getConnection();
-			statement = connection.prepareStatement("delete from userInfos  where id = ?");
+	public boolean deleteById(long id) {
+		boolean isDeleted = false;
+		try(
+				Connection connection =  daoFactory.getConnection();
+				PreparedStatement statement = connection.prepareStatement("delete from userInfos  where id = ?");
+		) 
+		{
 			statement.setLong(1, id);
+			isDeleted =statement.executeUpdate()>0;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return isDeleted;
 	}
 
 	@Override
-	public void update(User u) {
-		// TODO Auto-generated method stub
-		
+	public boolean update(User u) {
+		daoFactory = DaoFactory.getInstance();
+		boolean isUpdated = false;
+		try
+		(
+				Connection connection =  daoFactory.getConnection();
+				PreparedStatement statement = connection.prepareStatement("update userInfos set  firstName =? , lastName = ? , Address=?, Email = ? , phoneNUmber=? , sex=? "
+						+ "where id =?");
+		)
+		{
+			statement.setInt(7, u.getId());
+			statement.setString(1, u.getFirstName());
+			statement.setString(2, u.getLastName());
+			statement.setString(3, u.getAddress());
+			statement.setString(4, u.getEmail());
+			statement.setString(5, u.getPhoneNumber());
+			statement.setString(6, u.getSex());
+			isUpdated= statement.executeUpdate()==1;
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}	
+		return isUpdated;
 	}
 
 	@Override
 	public void save(User u) {
 		
-		Connection connection = null;
-		PreparedStatement statement = null;
-		daoFactory = DaoFactory.getInstance();
-		try {
-			connection =  daoFactory.getConnection();
-			statement = connection.prepareStatement("insert into userInfos (firstName,lastName,Address,Email,phoneNUmber,sex)"
-					+ "  values(?,? ,?,?,?,?)");
+		
+		
+		try
+		(
+				Connection connection =  daoFactory.getConnection();
+				PreparedStatement statement = connection.prepareStatement("insert into userInfos (firstName,lastName,Address,Email,phoneNUmber,sex)"
+						+ "  values(?,? ,?,?,?,?)");
+		)
+		{
 			statement.setString(1, u.getFirstName());
 			statement.setString(2, u.getLastName());
 			statement.setString(3, u.getAddress());
@@ -151,28 +161,9 @@ public class UserDaoImp implements UserDao {
 			statement.setString(5, u.getPhoneNumber());
 			statement.setString(6, u.getSex());
 			 statement.executeUpdate();
-			 connection.commit();
 		}catch(Exception e) {
 			e.printStackTrace();
-			 try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}finally {
-			try {
-				if(!connection.isClosed()) {
-					connection.close();
-				}
-				if(!statement.isClosed()) {
-					statement.close();
-				}
-				
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
 		}
 	}
 

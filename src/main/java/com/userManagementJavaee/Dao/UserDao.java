@@ -8,8 +8,8 @@ public interface UserDao {
 	
 	List<User> findAll();
 	User findById(long id);
-	void deleteById(long id);
-	void update(User u);
+	boolean deleteById(long id);
+	boolean update(User u);
 	void save(User u);
 
 }
