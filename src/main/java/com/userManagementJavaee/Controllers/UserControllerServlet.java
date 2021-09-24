@@ -17,7 +17,7 @@ import com.userManagementJavaee.beans.User;
 @WebServlet("/User")
 public class UserControllerServlet extends HttpServlet {
 	
-	UserDao userDao = new UserDaoImp();
+	UserDao userDao = null;
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -28,15 +28,18 @@ public class UserControllerServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		userDao = new UserDaoImp();
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		User u = new User("adam", "aghzaou", "tetouan", "", "", "");
-		userDao.save(u);
 		
-		response.getWriter().print(userDao.findAll());
 	}
 
 	/**

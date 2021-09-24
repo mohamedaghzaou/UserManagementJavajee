@@ -40,10 +40,6 @@ public class UserDaoImp implements UserDao {
 			}
 			
 		}catch(Exception e) {
-			
-			
-			
-			
 		}finally {
 			try {
 				if(!connection.isClosed()) {
@@ -55,6 +51,7 @@ public class UserDaoImp implements UserDao {
 				if(!resultset.isClosed()) {
 					resultset.close();
 				}
+				daoFactory= null;
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -79,7 +76,7 @@ public class UserDaoImp implements UserDao {
 			statement.setLong(1, id);
 			resultset = statement.executeQuery();
 			
-			while(resultset.next()) {
+			if(resultset.next()) {
 				user = new User(resultset.getInt(1),
 						resultset.getString(2),
 						resultset.getString(3),
@@ -87,7 +84,6 @@ public class UserDaoImp implements UserDao {
 						resultset.getString(5),
 						resultset.getString(6),
 						resultset.getString(7));
-				
 			}
 			
 		}catch(Exception e) {
@@ -116,7 +112,19 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public void deleteById(long id) {
-		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement statement = null;
+		daoFactory = DaoFactory.getInstance();
+		
+		
+		try {
+			connection =  daoFactory.getConnection();
+			statement = connection.prepareStatement("delete from userInfos  where id = ?");
+			statement.setLong(1, id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -128,12 +136,11 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public void save(User u) {
-		// TODO Auto-generated method stub
+		
 		Connection connection = null;
 		PreparedStatement statement = null;
 		daoFactory = DaoFactory.getInstance();
 		try {
-			
 			connection =  daoFactory.getConnection();
 			statement = connection.prepareStatement("insert into userInfos (firstName,lastName,Address,Email,phoneNUmber,sex)"
 					+ "  values(?,? ,?,?,?,?)");
@@ -145,7 +152,6 @@ public class UserDaoImp implements UserDao {
 			statement.setString(6, u.getSex());
 			 statement.executeUpdate();
 			 connection.commit();
-			 
 		}catch(Exception e) {
 			e.printStackTrace();
 			 try {
@@ -154,8 +160,6 @@ public class UserDaoImp implements UserDao {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
-			
 		}finally {
 			try {
 				if(!connection.isClosed()) {
@@ -170,9 +174,6 @@ public class UserDaoImp implements UserDao {
 				e1.printStackTrace();
 			}
 		}
-		
-		
-		
 	}
 
 }
