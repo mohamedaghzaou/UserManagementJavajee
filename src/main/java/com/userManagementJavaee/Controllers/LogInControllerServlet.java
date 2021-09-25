@@ -14,7 +14,7 @@ import com.userManagementJavaee.Dao.UserDaoImp;
 /**
  * Servlet implementation class LogInControllerServlet
  */
-@WebServlet("/LogIn")
+@WebServlet("/LogIn" )
 public class LogInControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	UserDao userDao = null;

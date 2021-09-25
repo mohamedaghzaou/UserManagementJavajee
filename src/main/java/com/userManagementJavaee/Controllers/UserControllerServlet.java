@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.userManagementJavaee.Dao.DaoFactory;
 import com.userManagementJavaee.Dao.UserDao;
@@ -41,9 +42,7 @@ public class UserControllerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
-		
+		// TODO Auto-generated method stub		
 		String op= Optional.ofNullable(request.getParameter("op")).orElse("");
 		switch (op) {
 		case "delete":
@@ -62,6 +61,8 @@ public class UserControllerServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/formUser.jsp").forward(request, response);
 			return;
 		}
+		
+
 		request.setAttribute("listuser", userDao.findAll());
 		request.getRequestDispatcher("/WEB-INF/User-list.jsp").forward(request, response);
 	}
