@@ -13,9 +13,10 @@
 <title>Insert title here</title>
 </head>
 <body>
+<%@include file="Header.jsp" %>
 
-
-<form action="User?op=${Action}" method="post">
+<div class="container">
+<form class="mt-5" action="User?op=${Action}" method="post">
   <div class="form-group">
     <input type="hidden" name="id" class="form-control" value="${user.id }" aria-describedby="emailHelp">
   </div>
@@ -39,12 +40,14 @@
     <label for="exampleInputPassword1">Phone Number</label>
     <input type="tel" class="form-control" id="exampleInputPassword1" value="${user.phoneNumber }" name="PhoneNumber"  placeholder="Enter Phone Number">
   </div>
-      <label for="exampleInputPassword1" >sex</label>
+      <label for="exampleInputPassword1" >Sex</label>
   <select class="form-select" name="sex" aria-label="Default select example">
   <option ${user.sex=='Male'?'selected':'' } value="Male">Male</option>
   <option ${user.sex=='Male'?'':'selected' } value="Female">Female</option>
 </select>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-success mt-3">${Action}</button>
+  <button type="submit" class="btn btn-white mt-3">Cancel</button>
 </form>
+</div>
 </body>
 </html>

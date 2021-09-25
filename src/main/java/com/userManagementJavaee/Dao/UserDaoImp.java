@@ -166,5 +166,27 @@ public class UserDaoImp implements UserDao {
 			
 		}
 	}
+	@Override
+		public boolean login(String username , String password) {
+			ResultSet r = null;
+		try
+		(
+				Connection connection =  daoFactory.getConnection();
+				PreparedStatement statement = connection.prepareStatement("select * from Employee where username = ? and password = ?");
+		)
+		{
+			statement.setString(1,username );
+			statement.setString(2,password);
+
+			r =  statement.executeQuery();
+			if(r.next()) {
+				return true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		return false;
+	}
 
 }

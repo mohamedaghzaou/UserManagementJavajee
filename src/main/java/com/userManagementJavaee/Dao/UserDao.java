@@ -11,5 +11,6 @@ public interface UserDao {
 	boolean deleteById(long id);
 	boolean update(User u);
 	void save(User u);
+	boolean login(String username , String password);
 
 }
