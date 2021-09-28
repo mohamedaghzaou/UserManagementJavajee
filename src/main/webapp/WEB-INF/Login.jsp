@@ -27,7 +27,7 @@
     <input type="password" class="form-control" required="required"  name="password" placeholder="Password">
   </div>
   <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <input type="checkbox" name="rememberme" class="form-check-input" id="exampleCheck1">
     <label class="form-check-label" for="exampleCheck1">Remember Me</label>
   </div>
   <button type="submit" class="btn btn-primary">LogIN</button>

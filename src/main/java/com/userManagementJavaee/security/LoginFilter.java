@@ -27,9 +27,6 @@ public class LoginFilter implements Filter {
      * Default constructor. 
      */
     public LoginFilter() {
-        // TODO Auto-generated constructor stub
-		System.out.println("filtringdjdjdj");
-
     }
 
 	/**
@@ -51,16 +48,26 @@ public class LoginFilter implements Filter {
 			HttpSession httpSession = httpResp.getSession();
 			String username=(String) httpSession.getAttribute("username");
 			String password=(String) httpSession.getAttribute("password");
-			System.out.print(username +password );
+			if(username ==null && password==null && httpResp.getCookies()!=null) {
+		
+				 try {
+					username= getCookieValue(httpResp, "userID");
+					password=getCookieValue(httpResp, "userP");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				httpSession.setAttribute("username", username);
+				httpSession.setAttribute("password", password);
+				System.out.print(username);
+			}
 
 			if(userDao.login(username, password)) {
 			
-				System.out.println("good");
 
 				chain.doFilter(request, response);
 		}else
 		{
-			System.out.println("not good");
 
 			httpRe.sendRedirect("LogIn");
 		}
@@ -73,6 +80,23 @@ public class LoginFilter implements Filter {
 		// TODO Auto-generated method stub
 		userDao = new UserDaoImp();
 
+	}
+	
+	public String getCookieValue(HttpServletRequest httpResp, String name) throws Exception {
+		for(int i  = 0 ; i< httpResp.getCookies().length;i++) {
+			if(httpResp.getCookies()[i].getName().equals(name)) {
+				
+					try {
+					return	EncrypteAndDecrypte.decrypt(httpResp.getCookies()[i].getValue());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						throw e;
+
+					}
+			}
+				
+		}
+		return null;
 	}
 
 }

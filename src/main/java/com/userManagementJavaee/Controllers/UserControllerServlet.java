@@ -67,11 +67,9 @@ public class UserControllerServlet extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/User-list.jsp").forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		String firstName = request.getParameter("Firstname");
 		String Lastname = request.getParameter("Lastname");
 		String Address = request.getParameter("Address");
