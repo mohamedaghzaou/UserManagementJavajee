@@ -23,28 +23,19 @@ public class LoginFilter implements Filter {
 
 	UserDao userDao = null;
 
-    /**
-     * Default constructor. 
-     */
     public LoginFilter() {
     }
 
-	/**
-	 * @see Filter#destroy()
-	 */
+
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
+
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {		
 			
 		HttpServletRequest httpResp = (HttpServletRequest) request;
 		HttpServletResponse httpRe = (HttpServletResponse) response;
-
-		
 			HttpSession httpSession = httpResp.getSession();
 			String username=(String) httpSession.getAttribute("username");
 			String password=(String) httpSession.getAttribute("password");
@@ -54,12 +45,10 @@ public class LoginFilter implements Filter {
 					username= getCookieValue(httpResp, "userID");
 					password=getCookieValue(httpResp, "userP");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				httpSession.setAttribute("username", username);
 				httpSession.setAttribute("password", password);
-				System.out.print(username);
 			}
 
 			if(userDao.login(username, password)) {
@@ -89,7 +78,6 @@ public class LoginFilter implements Filter {
 					try {
 					return	EncrypteAndDecrypte.decrypt(httpResp.getCookies()[i].getValue());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						throw e;
 
 					}
